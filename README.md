@@ -34,3 +34,40 @@
    
 3. Compile and Run:
    -Compile and run the main class to launch the application.
+
+## Contribution
+
+Contributions are welcome! Follow these steps to contribute:
+
+1. **Fork the Repository**  
+   - Click the "Fork" button on the top-right corner of this repository.
+
+2. **Clone Your Fork**  
+   - Run the following command in your terminal:
+   ```bash
+   git clone https://github.com/<your-username>/AppointUs-PBL.git
+   
+3. **Create a New Branch**
+   - Create a branch for your feature or fix:
+   ```bash
+   git checkout -b feature/your-feature-name
+
+4. **Commit Your Changes**
+   - Stage your changes and write a meaningful commit message:
+   ```bash
+   git commit -m "Add a meaningful commit message"
+   ```
+5. Push to Your Fork
+   - Push the branch to your forked repository:
+   ```bash
+   git push origin feature/your-feature-name
+
+6.Create a Pull Request
+   - Open a pull request to this repository.
+   - Provide a clear description of your changes and why they should be merged.
+   markdown
+
+
+
+
+
