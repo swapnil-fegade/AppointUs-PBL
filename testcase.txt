@@ -1,0 +1,39 @@
+# Login Test Cases
+LoginTest, Ravi Kumar, ravi@example.com, Pass
+LoginTest, Sneha Mehta, sneha@example.com, Pass
+LoginTest, Neha Sharma, neha@example.com, Pass
+LoginTest, Unknown User, unknown@example.com, Fail
+
+# Book Appointment Test Cases
+BookAppointmentTest, Ravi Kumar, Haircut, Arjun Verma, Pass
+BookAppointmentTest, Sneha Mehta, Massage, Priya Sharma, Pass
+BookAppointmentTest, Neha Sharma, Facial, Kavita Iyer, Pass
+BookAppointmentTest, Ravi Kumar, Facial, Unknown Provider, Fail
+BookAppointmentTest, Sneha Mehta, Manicure, Kavita Iyer, Fail
+BookAppointmentTest, Ravi Kumar, Haircut, Kavita Iyer, Pass
+
+# Check Service Availability Test Cases
+CheckServiceAvailabilityTest, Haircut, Arjun Verma, Pass
+CheckServiceAvailabilityTest, Massage, Kavita Iyer, Pass
+CheckServiceAvailabilityTest, Facial, Priya Sharma, Fail
+CheckServiceAvailabilityTest, Manicure, Priya Sharma, Fail
+
+# List Customer Appointments Test Cases
+ListCustomerAppointmentsTest, Ravi Kumar, ExpectedCount:2, Pass
+ListCustomerAppointmentsTest, Sneha Mehta, ExpectedCount:1, Pass
+ListCustomerAppointmentsTest, Neha Sharma, ExpectedCount:0, Pass
+ListCustomerAppointmentsTest, Unknown Customer, ExpectedCount:0, Fail
+
+# List Provider Appointments Test Cases
+ListProviderAppointmentsTest, Arjun Verma, ExpectedCount:1, Pass
+ListProviderAppointmentsTest, Priya Sharma, ExpectedCount:1, Pass
+ListProviderAppointmentsTest, Kavita Iyer, ExpectedCount:1, Pass
+ListProviderAppointmentsTest, Unknown Provider, ExpectedCount:0, Fail
+
+# Validate Customer/Provider Data Test Cases
+ValidateCustomerDataTest, Ravi Kumar, ravi@example.com, Pass
+ValidateCustomerDataTest, Sneha Mehta, sneha@example.com, Pass
+ValidateCustomerDataTest, Unknown Customer, unknown@example.com, Fail
+ValidateProviderDataTest, Arjun Verma, arjun@example.com, Pass
+ValidateProviderDataTest, Priya Sharma, priya@example.com, Pass
+ValidateProviderDataTest, Unknown Provider, unknown@example.com, Fail

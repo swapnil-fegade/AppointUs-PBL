@@ -1,0 +1,31 @@
+Customer, Ravi Kumar, ravi@example.com
+Customer, Sneha Mehta, sneha@example.com
+Customer, Priya Singh, priya@example.com
+Customer, Aman Joshi, aman@example.com
+Customer, Neha Sharma, neha@example.com
+Customer, Vikram Sethi, vikram@example.com
+Customer, Ritu Patel, ritu@example.com
+Customer, Mohan Yadav, mohan@example.com
+Customer, Suman Das, suman@example.com
+Customer, Arpita Chatterjee, arpita@example.com
+
+Provider, Arjun Verma, arjun@example.com
+Services: Haircut@150; Facial@400
+Provider, Priya Sharma, priya@example.com
+Services: Massage@200
+Provider, Kavita Iyer, kavita@example.com
+Services: Haircut@150; Massage@200
+Provider, Rohit Mehra, rohit@example.com
+Services: Facial@400
+Provider, Sneha Kapoor, sneha.k@example.com
+Services: Massage@250; Haircut@180
+Provider, Anil Gupta, anil@example.com
+Services: Massage@220
+Provider, Divya Rai, divya@example.com
+Services: Haircut@170; Facial@390
+Provider, Rajeev Nair, rajeev@example.com
+Services: Facial@410; Massage@240
+Provider, Meena Shankar, meena@example.com
+Services: Haircut@160; Facial@420
+Provider, Sunil Dubey, sunil@example.com
+Services: Massage@230; Haircut@175
