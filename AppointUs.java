@@ -277,23 +277,30 @@ public class AppointUs {
         System.out.println("ValidateCustomerDataTest " + (found ? "Passed" : "Failed"));
     }
     public static void handleLoginTest(String[] parts, List<Customer> customers) {
-        String email = parts[1].trim();
+        String expectedName = parts[1].trim();
+        String email = parts[2].trim();
         boolean loggedIn = false;
     
         System.out.println("Attempting login for email: " + email);
         for (Customer customer : customers) {
+            // Now compare the email to find the customer
             if (customer.getEmail().equalsIgnoreCase(email)) {
-                System.out.println("Login successful for customer: " + customer.name);
-                loggedIn = true;
-                break;
+                System.out.println("Checking customer: " + customer.getEmail());
+                if (customer.name.equalsIgnoreCase(expectedName)) {
+                    System.out.println("Login successful for customer: " + customer.name);
+                    loggedIn = true;
+                    break;
+                }
             }
         }
     
         if (!loggedIn) {
             System.out.println("Login failed for email: " + email + ". Customer not found.");
         }
-        System.out.println("LoginTest " + (loggedIn ? "Passed" : "Failed"));
+        System.out.println("LoginTest " + (loggedIn ? "Passed" : "Failed") + "\n");
     }
+    
+    
     public static void handleBookAppointmentTest(String[] parts, List<Customer> customers, List<ServiceProvider> providers) {
         String customerName = parts[1].trim();
         String serviceName = parts[2].trim();
