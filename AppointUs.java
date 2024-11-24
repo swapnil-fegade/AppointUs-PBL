@@ -119,6 +119,7 @@ class Appointment {
         return provider;
     }
 }
+
 public class AppointUs {
     public static void main(String[] args) {
         List<Customer> customers = new ArrayList<>();
@@ -137,7 +138,8 @@ public class AppointUs {
             String line;
             while ((line = br.readLine()) != null) {
                 line = line.trim();
-                if (line.isEmpty()) continue;
+                if (line.isEmpty())
+                    continue;
 
                 if (line.startsWith("Customer")) {
                     String[] parts = line.split(",", 3);
@@ -154,7 +156,8 @@ public class AppointUs {
                             for (String service : services) {
                                 String[] serviceParts = service.split("@");
                                 if (serviceParts.length == 2) {
-                                    provider.addService(new Service(serviceParts[0].trim(), Double.parseDouble(serviceParts[1].trim())));
+                                    provider.addService(new Service(serviceParts[0].trim(),
+                                            Double.parseDouble(serviceParts[1].trim())));
                                 }
                             }
                         }
@@ -167,72 +170,205 @@ public class AppointUs {
         }
     }
 
-    // Method to run test cases
+    // Parsing test cases and executing them
     public static void runTestCases(String filename, List<Customer> customers, List<ServiceProvider> providers) {
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
             String line;
             while ((line = br.readLine()) != null) {
                 line = line.trim();
-                if (line.isEmpty()) continue;
-
-                String[] parts = line.split(",", 5); // Split into test case components
-                if (parts.length >= 4) {
-                    String testType = parts[0].trim();
-                    String customerName = parts[1].trim();
-                    String emailOrService = parts[2].trim();
-                    String providerOrExpected = parts[3].trim();
-
-                    System.out.println("\nRunning test case: " + testType);
-
-                    switch (testType) {
-                        case "LoginTest" -> {
-                            Customer customer = customers.stream()
-                                    .filter(c -> c.getEmail().equals(emailOrService))
-                                    .findFirst()
-                                    .orElse(null);
-                            boolean result = customer != null;
-                            System.out.println("Checking login for email: " + emailOrService);
-                            System.out.println("Expected: " + providerOrExpected);
-                            System.out.println("Result: " + (result ? "Pass" : "Fail"));
-                        }
-                        case "BookAppointmentTest" -> {
-                            Customer customer = customers.stream()
-                                    .filter(c -> c.name.equals(customerName))
-                                    .findFirst()
-                                    .orElse(null);
-                            ServiceProvider provider = providers.stream()
-                                    .filter(p -> p.name.equals(providerOrExpected))
-                                    .findFirst()
-                                    .orElse(null);
-                            if (customer != null && provider != null) {
-                                Service service = provider.getServicesOffered().stream()
-                                        .filter(s -> s.getServiceName().equals(emailOrService))
-                                        .findFirst()
-                                        .orElse(null);
-                                if (service != null) {
-                                    Appointment appointment = new Appointment("2024-11-09", service, provider);
-                                    customer.bookAppointment(appointment);
-                                    provider.addAppointment(appointment);
-                                    System.out.println("Booking appointment for " + customerName + " with " + providerOrExpected);
-                                    System.out.println("Expected: " + providerOrExpected);
-                                    System.out.println("Result: Pass");
-                                } else {
-                                    System.out.println("Service not found: " + emailOrService);
-                                    System.out.println("Result: Fail");
-                                }
-                            } else {
-                                System.out.println("Customer or Provider not found.");
-                                System.out.println("Result: Fail");
-                            }
-                        }
-                        default -> System.out.println("Unknown test case type: " + testType);
-                    }
-                } else {
-                    System.err.println("Invalid test case format: " + line);
+                if (line.startsWith("#") || line.isEmpty()) {
+                    // Skip comments or empty lines
+                    continue;
                 }
+
+                System.out.println("Running test case: " + line);
+                String[] parts = line.split(",");
+                if (parts.length < 4) {
+                    System.out.println("Invalid test case format: " + line);
+                    continue;
+                }
+
+                String testCaseType = parts[0].trim();
+                switch (testCaseType) {
+                    case "LoginTest" -> handleLoginTest(parts, customers);
+                    case "BookAppointmentTest" -> handleBookAppointmentTest(parts, customers, providers);
+                    case "CheckServiceAvailabilityTest" -> handleCheckServiceAvailabilityTest(parts, providers);
+                    case "ListCustomerAppointmentsTest" -> handleListCustomerAppointmentsTest(parts, customers);
+                    case "ListProviderAppointmentsTest" -> handleListProviderAppointmentsTest(parts, providers);
+                    case "ValidateCustomerDataTest" -> handleValidateCustomerDataTest(parts, customers);
+                    case "ValidateProviderDataTest" -> handleValidateProviderDataTest(parts, providers);
+                    default -> System.out.println("Test case type not supported: " + testCaseType);
+                }
+                //Added space line 
+                System.out.println();
             }
         } catch (IOException e) {
-            System.err.println("Error reading test cases file: " + e.getMessage());
+            System.out.println("Error reading test cases file: " + e.getMessage());
         }
     }
-}
+    public static void handleCheckServiceAvailabilityTest(String[] parts, List<ServiceProvider> providers) {
+        String serviceName = parts[1].trim();
+        boolean isAvailable = false;
+    
+        System.out.println("Checking service availability: " + serviceName);
+        for (ServiceProvider provider : providers) {
+            for (Service service : provider.getServicesOffered()) {
+                if (service.getServiceName().equalsIgnoreCase(serviceName)) {
+                    System.out.println("Service " + serviceName + " is available with " + provider.name + " (INR " + service.getPrice() + ")");
+                    isAvailable = true;
+                }
+            }
+        }
+    
+        if (!isAvailable) {
+            System.out.println("Service " + serviceName + " is not available with any provider.");
+        }
+        System.out.println("CheckServiceAvailabilityTest " + (isAvailable ? "Passed" : "Failed"));
+    }
+    public static void handleListCustomerAppointmentsTest(String[] parts, List<Customer> customers) {
+        String customerName = parts[1].trim();
+        boolean found = false;
+    
+        System.out.println("Listing appointments for customer: " + customerName);
+        for (Customer customer : customers) {
+            if (customer.name.equalsIgnoreCase(customerName)) {
+                customer.listBookedAppointments();
+                found = true;
+            }
+        }
+    
+        if (!found) {
+            System.out.println("No appointments found for customer " + customerName);
+        }
+        System.out.println("ListCustomerAppointmentsTest " + (found ? "Passed" : "Failed"));
+    }
+    public static void handleListProviderAppointmentsTest(String[] parts, List<ServiceProvider> providers) {
+        String providerName = parts[1].trim();
+        boolean found = false;
+    
+        System.out.println("Listing appointments for provider: " + providerName);
+        for (ServiceProvider provider : providers) {
+            if (provider.name.equalsIgnoreCase(providerName)) {
+                provider.listAppointments();
+                found = true;
+            }
+        }
+    
+        if (!found) {
+            System.out.println("No appointments found for provider " + providerName);
+        }
+        System.out.println("ListProviderAppointmentsTest " + (found ? "Passed" : "Failed"));
+    }
+    public static void handleValidateCustomerDataTest(String[] parts, List<Customer> customers) {
+        String customerName = parts[1].trim();
+        boolean found = false;
+    
+        System.out.println("Validating customer data for: " + customerName);
+        for (Customer customer : customers) {
+            if (customer.name.equalsIgnoreCase(customerName)) {
+                customer.displayInfo();
+                found = true;
+            }
+        }
+    
+        if (!found) {
+            System.out.println("Customer " + customerName + " does not exist in the system.");
+        }
+        System.out.println("ValidateCustomerDataTest " + (found ? "Passed" : "Failed"));
+    }
+    public static void handleLoginTest(String[] parts, List<Customer> customers) {
+        String email = parts[1].trim();
+        boolean loggedIn = false;
+    
+        System.out.println("Attempting login for email: " + email);
+        for (Customer customer : customers) {
+            if (customer.getEmail().equalsIgnoreCase(email)) {
+                System.out.println("Login successful for customer: " + customer.name);
+                loggedIn = true;
+                break;
+            }
+        }
+    
+        if (!loggedIn) {
+            System.out.println("Login failed for email: " + email + ". Customer not found.");
+        }
+        System.out.println("LoginTest " + (loggedIn ? "Passed" : "Failed"));
+    }
+    public static void handleBookAppointmentTest(String[] parts, List<Customer> customers, List<ServiceProvider> providers) {
+        String customerName = parts[1].trim();
+        String serviceName = parts[2].trim();
+        String providerName = parts[3].trim();
+        String date = parts.length > 4 ? parts[4].trim() : "2024-11-10"; // Default date if not provided
+    
+        System.out.println("Attempting to book appointment:");
+        System.out.println("Customer: " + customerName + ", Service: " + serviceName + ", Provider: " + providerName + ", Date: " + date);
+    
+        Customer bookingCustomer = null;
+        ServiceProvider bookingProvider = null;
+        Service bookingService = null;
+    
+        // Find the customer
+        for (Customer customer : customers) {
+            if (customer.name.equalsIgnoreCase(customerName)) {
+                bookingCustomer = customer;
+                break;
+            }
+        }
+    
+        // Find the provider and validate the service
+        for (ServiceProvider provider : providers) {
+            if (provider.name.equalsIgnoreCase(providerName)) {
+                bookingProvider = provider;
+                for (Service service : provider.getServicesOffered()) {
+                    if (service.getServiceName().equalsIgnoreCase(serviceName)) {
+                        bookingService = service;
+                        break;
+                    }
+                }
+            }
+        }
+    
+        if (bookingCustomer != null && bookingProvider != null && bookingService != null) {
+            Appointment appointment = new Appointment(date, bookingService, bookingProvider);
+            bookingCustomer.bookAppointment(appointment);
+            bookingProvider.addAppointment(appointment);
+            System.out.println("Appointment booked successfully!");
+            System.out.println("BookAppointmentTest Passed");
+        } else {
+            if (bookingCustomer == null) {
+                System.out.println("Customer not found: " + customerName);
+            }
+            if (bookingProvider == null) {
+                System.out.println("Provider not found: " + providerName);
+            } else if (bookingService == null) {
+                System.out.println("Service not found or not offered by provider: " + serviceName);
+            }
+            System.out.println("BookAppointmentTest Failed");
+        }
+    }
+    public static void handleValidateProviderDataTest(String[] parts, List<ServiceProvider> providers) {
+        String providerName = parts[1].trim();
+        boolean found = false;
+    
+        System.out.println("Validating provider data for: " + providerName);
+        for (ServiceProvider provider : providers) {
+            if (provider.name.equalsIgnoreCase(providerName)) {
+                provider.displayInfo();
+                System.out.println("Services offered by " + provider.name + ":");
+                for (Service service : provider.getServicesOffered()) {
+                    System.out.println("- " + service.getServiceName() + " (INR " + service.getPrice() + ")");
+                }
+                found = true;
+            }
+        }
+    
+        if (!found) {
+            System.out.println("Provider " + providerName + " does not exist in the system.");
+        }
+        System.out.println("ValidateProviderDataTest " + (found ? "Passed" : "Failed"));
+    }
+    
+        
+                
+
+} // final
