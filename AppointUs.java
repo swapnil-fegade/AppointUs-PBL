@@ -199,36 +199,39 @@ public class AppointUs {
                     case "ValidateProviderDataTest" -> handleValidateProviderDataTest(parts, providers);
                     default -> System.out.println("Test case type not supported: " + testCaseType);
                 }
-                //Added space line 
+                // Added space line
                 System.out.println();
             }
         } catch (IOException e) {
             System.out.println("Error reading test cases file: " + e.getMessage());
         }
     }
+
     public static void handleCheckServiceAvailabilityTest(String[] parts, List<ServiceProvider> providers) {
         String serviceName = parts[1].trim();
         boolean isAvailable = false;
-    
+
         System.out.println("Checking service availability: " + serviceName);
         for (ServiceProvider provider : providers) {
             for (Service service : provider.getServicesOffered()) {
                 if (service.getServiceName().equalsIgnoreCase(serviceName)) {
-                    System.out.println("Service " + serviceName + " is available with " + provider.name + " (INR " + service.getPrice() + ")");
+                    System.out.println("Service " + serviceName + " is available with " + provider.name + " (INR "
+                            + service.getPrice() + ")");
                     isAvailable = true;
                 }
             }
         }
-    
+
         if (!isAvailable) {
             System.out.println("Service " + serviceName + " is not available with any provider.");
         }
         System.out.println("CheckServiceAvailabilityTest " + (isAvailable ? "Passed" : "Failed"));
     }
+
     public static void handleListCustomerAppointmentsTest(String[] parts, List<Customer> customers) {
         String customerName = parts[1].trim();
         boolean found = false;
-    
+
         System.out.println("Listing appointments for customer: " + customerName);
         for (Customer customer : customers) {
             if (customer.name.equalsIgnoreCase(customerName)) {
@@ -236,16 +239,17 @@ public class AppointUs {
                 found = true;
             }
         }
-    
+
         if (!found) {
             System.out.println("No appointments found for customer " + customerName);
         }
         System.out.println("ListCustomerAppointmentsTest " + (found ? "Passed" : "Failed"));
     }
+
     public static void handleListProviderAppointmentsTest(String[] parts, List<ServiceProvider> providers) {
         String providerName = parts[1].trim();
         boolean found = false;
-    
+
         System.out.println("Listing appointments for provider: " + providerName);
         for (ServiceProvider provider : providers) {
             if (provider.name.equalsIgnoreCase(providerName)) {
@@ -253,16 +257,17 @@ public class AppointUs {
                 found = true;
             }
         }
-    
+
         if (!found) {
             System.out.println("No appointments found for provider " + providerName);
         }
         System.out.println("ListProviderAppointmentsTest " + (found ? "Passed" : "Failed"));
     }
+
     public static void handleValidateCustomerDataTest(String[] parts, List<Customer> customers) {
         String customerName = parts[1].trim();
         boolean found = false;
-    
+
         System.out.println("Validating customer data for: " + customerName);
         for (Customer customer : customers) {
             if (customer.name.equalsIgnoreCase(customerName)) {
@@ -270,17 +275,18 @@ public class AppointUs {
                 found = true;
             }
         }
-    
+
         if (!found) {
             System.out.println("Customer " + customerName + " does not exist in the system.");
         }
         System.out.println("ValidateCustomerDataTest " + (found ? "Passed" : "Failed"));
     }
+
     public static void handleLoginTest(String[] parts, List<Customer> customers) {
         String expectedName = parts[1].trim();
         String email = parts[2].trim();
         boolean loggedIn = false;
-    
+
         System.out.println("Attempting login for email: " + email);
         for (Customer customer : customers) {
             // Now compare the email to find the customer
@@ -293,27 +299,28 @@ public class AppointUs {
                 }
             }
         }
-    
+
         if (!loggedIn) {
             System.out.println("Login failed for email: " + email + ". Customer not found.");
         }
         System.out.println("LoginTest " + (loggedIn ? "Passed" : "Failed") + "\n");
     }
-    
-    
-    public static void handleBookAppointmentTest(String[] parts, List<Customer> customers, List<ServiceProvider> providers) {
+
+    public static void handleBookAppointmentTest(String[] parts, List<Customer> customers,
+            List<ServiceProvider> providers) {
         String customerName = parts[1].trim();
         String serviceName = parts[2].trim();
         String providerName = parts[3].trim();
         String date = parts.length > 4 ? parts[4].trim() : "2024-11-10"; // Default date if not provided
-    
+
         System.out.println("Attempting to book appointment:");
-        System.out.println("Customer: " + customerName + ", Service: " + serviceName + ", Provider: " + providerName + ", Date: " + date);
-    
+        System.out.println("Customer: " + customerName + ", Service: " + serviceName + ", Provider: " + providerName
+                + ", Date: " + date);
+
         Customer bookingCustomer = null;
         ServiceProvider bookingProvider = null;
         Service bookingService = null;
-    
+
         // Find the customer
         for (Customer customer : customers) {
             if (customer.name.equalsIgnoreCase(customerName)) {
@@ -321,7 +328,7 @@ public class AppointUs {
                 break;
             }
         }
-    
+
         // Find the provider and validate the service
         for (ServiceProvider provider : providers) {
             if (provider.name.equalsIgnoreCase(providerName)) {
@@ -334,7 +341,7 @@ public class AppointUs {
                 }
             }
         }
-    
+
         if (bookingCustomer != null && bookingProvider != null && bookingService != null) {
             Appointment appointment = new Appointment(date, bookingService, bookingProvider);
             bookingCustomer.bookAppointment(appointment);
@@ -353,10 +360,11 @@ public class AppointUs {
             System.out.println("BookAppointmentTest Failed");
         }
     }
+
     public static void handleValidateProviderDataTest(String[] parts, List<ServiceProvider> providers) {
         String providerName = parts[1].trim();
         boolean found = false;
-    
+
         System.out.println("Validating provider data for: " + providerName);
         for (ServiceProvider provider : providers) {
             if (provider.name.equalsIgnoreCase(providerName)) {
@@ -368,14 +376,11 @@ public class AppointUs {
                 found = true;
             }
         }
-    
+
         if (!found) {
             System.out.println("Provider " + providerName + " does not exist in the system.");
         }
         System.out.println("ValidateProviderDataTest " + (found ? "Passed" : "Failed"));
     }
-    
-        
-                
 
 } // final
